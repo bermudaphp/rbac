@@ -1,6 +1,6 @@
 <?php
 
-namespace RBAC;
+namespace Bermuda\RBAC;
 
 class InvalidContextException extends \Exception
 {
