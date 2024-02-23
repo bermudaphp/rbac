@@ -1,6 +1,6 @@
 <?php
 
-namespace RBAC;
+namespace Bermuda\RBAC;
 
 use Doctrine\Common\Collections\Collection;
 
