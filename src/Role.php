@@ -5,7 +5,6 @@ namespace Bermuda\RBAC;
 use Bermuda\Stdlib\Arrayable;
 use Bermuda\Stdlib\StrHelper;
 use Doctrine\Common\Collections\Collection;
-use Entity\User\User;
 
 class Role implements Arrayable, AccessControl
 {
@@ -14,7 +13,7 @@ class Role implements Arrayable, AccessControl
     public ?int $description = null;
 
     /**
-     * @var Collection<User>|null
+     * @var Collection<object>|null
      */
     public ?Collection $users = null;
 
