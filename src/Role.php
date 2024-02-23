@@ -37,6 +37,11 @@ class Role implements Arrayable, AccessControl
         return false;
     }
 
+    public function getWeight(): int
+    {
+        return $this->permissions?->count() ?? 0;
+    }
+
     /**
      * @param string|string[] $roleID
      * @return bool
