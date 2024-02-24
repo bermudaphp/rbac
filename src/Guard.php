@@ -9,16 +9,16 @@ final class Guard implements AccessControl
      */
     private array $rules = [];
 
-    public function enforce(string $permission, ActorInterface $actor, ?array $context = null): bool
+    public function enforce(string $permission, ActorInterface $actor, mixed ... $context): bool
     {
         $rule = $this->rules[$permission] ?? null;
-        foreach ($actor->getRole()->getPermissions() as $prmsssn) {
-            if ($prmsssn->getName() == $permission) {
-                return $rule ? $rule($actor, ... $context ?? []) : true;
+        foreach ($actor->getRole()->getPermissions() as $prmssn) {
+            if ($prmssn->getName() == $permission) {
+                return $rule ? $rule($actor, ... $context) : true;
             }
         }
 
-        return $rule ? $rule($actor, ... $context ?? []) : false;
+        return $rule ? $rule($actor, ... $context) : false;
     }
 
     public function associate(string $permission, callable $rule): void
