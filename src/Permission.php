@@ -1,22 +1,30 @@
 <?php
 
-namespace Bermuda\RBAC;
+namespace RBAC;
 
-use Doctrine\Common\Collections\Collection;
-
-class Permission implements \Stringable
+class Permission implements \Stringable, PermissionInterface
 {
     public ?int $id = null;
     public ?string $name = null;
-    public ?string $description = null;
+    public ?int $code = null;
 
     /**
-     * @var Collection<Role>|null
+     * @var iterable<Role>
      */
-    public ?Collection $roles = null;
+    public iterable $roles = [];
 
     public function __toString(): string
     {
         return $this->name;
+    }
+
+    public function getCode(): int
+    {
+        return $this->code ?? 0;
+    }
+
+    public function getName(): string
+    {
+        return $this->name ?? '';
     }
 }

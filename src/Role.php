@@ -1,19 +1,20 @@
 <?php
 
-namespace Bermuda\RBAC;
+namespace RBAC;
 
 use Bermuda\Stdlib\Arrayable;
-use Bermuda\Stdlib\StrHelper;
 use Doctrine\Common\Collections\Collection;
+use Entity\User\User;
 
-class Role implements Arrayable, AccessControl
+class Role implements Arrayable, RoleInterface
 {
     public ?int $id = null;
     public ?string $name = null;
+    public ?int $hierarchy = null;
     public ?int $description = null;
 
     /**
-     * @var Collection<object>|null
+     * @var Collection<User>|null
      */
     public ?Collection $users = null;
 
@@ -22,37 +23,34 @@ class Role implements Arrayable, AccessControl
      */
     public ?Collection $permissions = null;
 
-    /**
-     * @param string|array $permissionID
-     * @param array|null $context
-     * @return bool
-     */
-    public function can(string|array $permissionID, ?array $context = null): bool
+    public function __construct(string $name)
     {
-        foreach ($this->permissions as $permission)
-            if ($permission->is($permissionID)
-                && $permission->can($context[$permission->name] ?? $context))
-                return true;
-
-        return false;
+        $this->name = $name;
     }
 
-    public function getWeight(): int
+    public function getHierarchy(): int
     {
-        return $this->permissions?->count() ?? 0;
-    }
-
-    /**
-     * @param string|string[] $roleID
-     * @return bool
-     */
-    public function is(string|array $roleID): bool
-    {
-        return StrHelper::equals($this->name, $roleID);
+        return $this->hierarchy ?? -1 ;
     }
 
     public function toArray(): array
     {
-        return ['id' => $this->id, 'name' => $this->name];
+        return ['id' => $this->id, 'name' => $this->name, 'hierarchy' => $this->hierarchy];
+    }
+
+    /**
+     * @return iterable<PermissionInterface>
+     */
+    public function getPermissions(): iterable
+    {
+        return $this->permissions ?? [];
+    }
+
+    public function getPermissionsMask(): int
+    {
+        $mask = 0;
+        foreach ($this->permissions as $permission) $mask |= $permission->code;
+
+        return $mask;
     }
 }
