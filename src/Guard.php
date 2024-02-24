@@ -9,7 +9,7 @@ final class Guard implements AccessControl
      */
     private array $rules = [];
 
-    public function enforce(string $permission, ActorInterface $actor, mixed ... $context): bool
+    public function enforce(string $permission, ActorInterface $actor, array $context = []): bool
     {
         $rule = $this->rules[$permission] ?? null;
         foreach ($actor->getRole()->getPermissions() as $prmssn) {
