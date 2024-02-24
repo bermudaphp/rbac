@@ -1,6 +1,6 @@
 <?php
 
-namespace RBAC;
+namespace Bermuda\RBAC;
 
 final class Guard implements AccessControl
 {
