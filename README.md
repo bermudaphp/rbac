@@ -39,21 +39,24 @@ class User implements \Bermuda\RBAC\RoleInterface
         return $this->permissions;
     }
 
-    public function associate(string $permissionId): \Bermuda\RBAC\RoleInterface
+    public function associate(string|PermissionInterface $permission): \Bermuda\RBAC\RoleInterface
     {
-        $this->permissions[$permissionId] = new \Bermuda\RBAC\Permission($permissionId);
+        if ($permission instanceof PermissionInterface) {
+            $this->permissions[$permission->getId()] = $permission
+        }
+        $this->permissions[$permission] = new \Bermuda\RBAC\Permission($permission);
         return $this;
     }
 
-    public function dissociate(string $permissionId): \Bermuda\RBAC\RoleInterface
+    public function dissociate(string|PermissionInterface $permission): \Bermuda\RBAC\RoleInterface
     {
-        unset($this->permissions[$permissionId]);
+        unset($this->permissions[$permission?->getId() ?? $permission]);
         return $this;
     }
 
-    public function has(string $permissionId): bool
+    public function has(string|PermissionInterface $permission): bool
     {
-        return array_key_exists($permissionId, $this->permissions);
+        return array_key_exists($permission?->permission ?? $permission, $this->permissions);
     }
 }
 
