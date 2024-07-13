@@ -6,5 +6,5 @@ use RBAC\Exception\InvalidContextException;
 
 interface AccessControl
 {
-    public function enforce(string $permission, ActorInterface $actor, array $context = []): bool ;
+    public function enforce(string $permission, ActorInterface $actor, object $context = null): bool ;
 }
