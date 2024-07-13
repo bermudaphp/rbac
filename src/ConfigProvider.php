@@ -4,13 +4,15 @@ namespace Bermuda\RBAC;
 
 class ConfigProvider extends \Bermuda\Config\ConfigProvider
 {
+    public const string CONF_RULES_KEY = 'Bermuda\RBAC_RULES';
+
     protected function getAliases(): array
     {
         return [AccessControl::class => Guard::class];
     }
 
-    protected function getInvokables(): array
+    protected function getFactories(): array
     {
-        return [AccessControl::class];
+        return [Guard::class => GuardFactory::class];
     }
 }

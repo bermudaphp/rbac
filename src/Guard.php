@@ -2,7 +2,9 @@
 
 namespace Bermuda\RBAC;
 
+use Bermuda\RBAC\Rules\RuleMode;
 use Bermuda\RBAC\Rules\RuleInterface;
+use Bermuda\RBAC\Rules\PermissionAwareInterface;
 
 final class Guard implements AccessControl
 {
@@ -16,21 +18,31 @@ final class Guard implements AccessControl
      */
     public function __construct(iterable $rules = [])
     {
-        foreach ($rules as $p => $rule) $this->associate($p, $rule);
+        foreach ($rules as $p => $rule) $this->addRule($p, $rule);
     }
 
-    public function enforce(string $permission, ActorInterface $actor, object $context = null): bool
+    public function enforce(string $permission, ActorInterface|RoleInterface $actor, object $context = null): bool
     {
-        $result = (bool) $this->rules[$permission]?->can($actor, $context);
-        if ($actor->getRole()->has($permission) && $result) return true;
+        $role = $actor instanceof ActorInterface ? $actor->getRole() : $actor;
+        if (($rule = $this->rules[$permission] ?? null) !== null) {
+            if ($rule instanceof PermissionAwareInterface) $rule->setPermission($permission);
+            switch ($rule->mode()) {
+                case RuleMode::with:
+                    return $role->has($permission) && $rule->can($actor, $context);
+                case RuleMode::without:
+                    return !$role->getRole()->has($permission) && $rule->can($actor, $context);
+                case RuleMode::ever:
+                    return $rule->can($actor, $context);
+            }
+        }
 
-        return $result;
+        return $role->has($permission);
     }
 
     /**
      * @param string[] $permissions
      */
-    public function enforceAny(array $permissions, ActorInterface $actor, object $context = null): bool
+    public function enforceAny(array $permissions, ActorInterface|RoleInterface $actor, object $context = null): bool
     {
         foreach ($permissions as $permission) {
             $result = $this->enforce($permission, $actor, $context instanceof ContextAggregator
@@ -43,9 +55,17 @@ final class Guard implements AccessControl
         return false;
     }
 
-    public function associate(string $permission, RuleInterface $rule): self
+    /**
+     * @param iterable<string, RuleInterface> $rules
+     * @return Guard
+     */
+    public function withRules(iterable $rules): Guard
+    {
+        return new self($rules);
+    }
+
+    private function addRule(string $permission, RuleInterface $rule): void
     {
         $this->rules[$permission] = $rule;
-        return $this;
     }
 }
