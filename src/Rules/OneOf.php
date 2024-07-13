@@ -4,7 +4,7 @@ namespace Bermuda\RBAC\Rules;
 
 use Bermuda\RBAC\ActorInterface;
 
-final class OneOf implements RuleInterface
+final class OneOf implements RuleInterface, PermissionAwareInterface
 {
     use RulesTrait;
 
