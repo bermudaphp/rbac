@@ -134,7 +134,7 @@ final class EditBlogContext
 
 final class EditSelfBlogRule implements \Bermuda\RBAC\Rules\RuleInterface
 {
-    public function can(\Bermuda\RBAC\ActorInterface $actor, object $context = null): bool
+    public function can(ActorInterface|RoleInterface $actor, object $context = null): bool
     {
         /**
          * @var EditBlogContext $context
