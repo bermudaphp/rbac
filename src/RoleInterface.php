@@ -14,12 +14,12 @@ interface RoleInterface
     /**
      * @return $this
      */
-    public function associate(string $permissionId): RoleInterface ;
+    public function associate(string|PermissionInterface $permissionId): RoleInterface ;
 
     /**
      * @return $this
      */
-    public function dissociate(string $permissionId): RoleInterface ;
+    public function dissociate(string|PermissionInterface $permissionId): RoleInterface ;
 
     public function has(string $permissionId): bool ;
 }
