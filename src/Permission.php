@@ -2,29 +2,26 @@
 
 namespace Bermuda\RBAC;
 
-class Permission implements \Stringable, PermissionInterface
+final class Permission implements \Stringable, PermissionInterface
 {
-    public ?int $id = null;
-    public ?string $name = null;
-    public ?int $code = null;
-
     /**
-     * @var iterable<Role>
+     * @var iterable<RoleTrait>
      */
     public iterable $roles = [];
 
+    public function __construct(
+        public readonly string $id
+    ) {
+    }
+
+
     public function __toString(): string
     {
-        return $this->name;
+        return $this->id;
     }
 
-    public function getCode(): int
+    public function getId(): string
     {
-        return $this->code ?? 0;
-    }
-
-    public function getName(): string
-    {
-        return $this->name ?? '';
+        return $this->id;
     }
 }

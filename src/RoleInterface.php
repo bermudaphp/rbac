@@ -11,5 +11,15 @@ interface RoleInterface
      */
     public function getPermissions(): iterable ;
 
-    public function getPermissionsMask(): int ;
+    /**
+     * @return $this
+     */
+    public function associate(string $permissionId): RoleInterface ;
+
+    /**
+     * @return $this
+     */
+    public function dissociate(string $permissionId): RoleInterface ;
+
+    public function has(string $permissionId): bool ;
 }

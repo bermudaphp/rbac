@@ -4,6 +4,5 @@ namespace Bermuda\RBAC;
 
 interface PermissionInterface
 {
-    public function getCode(): int ;
-    public function getName(): string ;
+    public function getId(): string ;
 }
