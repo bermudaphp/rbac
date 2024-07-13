@@ -22,9 +22,7 @@ class User implements \Bermuda\RBAC\RoleInterface
         public int $id, iterable $permissions = []
     ){
         foreach ($permissions as $permission) {
-            if ($permission instanceof \Bermuda\RBAC\PermissionInterface) {
-                $this->permissions[$permission->getId()] = $permission;
-            } else $this->associate($permission);
+            $this->associate($permission);
         }
     }
 
@@ -43,8 +41,7 @@ class User implements \Bermuda\RBAC\RoleInterface
     {
         if ($permission instanceof PermissionInterface) {
             $this->permissions[$permission->getId()] = $permission
-        }
-        $this->permissions[$permission] = new \Bermuda\RBAC\Permission($permission);
+        } else $this->permissions[$permission] = new \Bermuda\RBAC\Permission($permission);
         return $this;
     }
 
