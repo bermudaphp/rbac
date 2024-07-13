@@ -101,7 +101,8 @@ $createBlogAction = function (\Bermuda\RBAC\AccessControl $rbac, \Bermuda\RBAC\R
     }
 
     return new Blog($state->id ?? ++$id, $state->title, $actor);
-};
+}
+
 $editBlogAction = function (\Bermuda\RBAC\AccessControl $rbac, \Bermuda\RBAC\RoleInterface $actor, Blog $blog, BlogState $state) use ($guard): Blog
 {
     if (!$guard->enforce(Permissions::EDIT_BLOG->name, $actor, new EditBlogContext($blog))) {
@@ -152,5 +153,7 @@ final class EditSelfBlogRule implements \Bermuda\RBAC\Rules\RuleInterface
 $guard = $guard->withRules([Permissions::EDIT_BLOG->name => new EditSelfBlogRule]); // Now the user can edit their own blog even without global permission
 
 $editBlogAction($guard, $user, $blog, new BlogState(title: 'New blog title')); // success
-
 ````
+# Check for one of many permits
+```php
+$guard->enforceAny(['p1', 'p2'], $actor, new ContextAggregator(['p1' => new P1Context, 'p2' => new P2Context]))
