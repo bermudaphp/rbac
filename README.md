@@ -15,7 +15,7 @@ class User implements \Bermuda\RBAC\RoleInterface
     private array $permissions;
 
     /**
-     * @param int $id
+     * @param string $id
      * @param iterable<string|\Bermuda\RBAC\PermissionInterface> $permissions
      */
     public function __construct(
