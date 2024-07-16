@@ -19,7 +19,7 @@ class User implements \Bermuda\RBAC\RoleInterface
      * @param iterable<string|\Bermuda\RBAC\PermissionInterface> $permissions
      */
     public function __construct(
-        public int $id, iterable $permissions = []
+        public string $id, iterable $permissions = []
     ){
         foreach ($permissions as $permission) {
             $this->associate($permission);
