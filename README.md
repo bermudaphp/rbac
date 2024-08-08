@@ -47,13 +47,15 @@ class User implements \Bermuda\RBAC\RoleInterface
 
     public function dissociate(string|PermissionInterface $permission): \Bermuda\RBAC\RoleInterface
     {
-        unset($this->permissions[$permission?->getId() ?? $permission]);
+        is_string($permission) ?
+            unset($permission) : unset($permission->getId());
+
         return $this;
     }
 
     public function has(string|PermissionInterface $permission): bool
     {
-        return array_key_exists(is_string($permission) ?$permission->getId() : $permission, $this->permissions);
+        return array_key_exists(is_string($permission) ? $permission->getId() : $permission, $this->permissions);
     }
 }
 
