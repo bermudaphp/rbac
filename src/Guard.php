@@ -30,7 +30,7 @@ final class Guard implements AccessControl
                 case RuleMode::with:
                     return $role->has($permission) && $rule->can($actor, $context);
                 case RuleMode::without:
-                    return !$role->has($permission) && $rule->can($actor, $context);
+                    return $this->checkWithout($permission, $role, $rule, $actor, $context);
                 case RuleMode::ever:
                     return $rule->can($actor, $context);
             }
@@ -67,5 +67,17 @@ final class Guard implements AccessControl
     private function addRule(string $permission, RuleInterface $rule): void
     {
         $this->rules[$permission] = $rule;
+    }
+
+    private function checkWithout(
+        string $prmsn, 
+        RoleInterface $role, 
+        RuleInterface $rule, 
+        ActorInterface|RoleInterface $actor, 
+        object $context = null
+    ): bool
+    {
+        if ($role->has($prmsn)) return true;
+        return $rule->can($actor, $context);
     }
 }
