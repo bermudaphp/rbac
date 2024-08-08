@@ -30,7 +30,7 @@ final class Guard implements AccessControl
                 case RuleMode::with:
                     return $role->has($permission) && $rule->can($actor, $context);
                 case RuleMode::without:
-                    return !$role->getRole()->has($permission) && $rule->can($actor, $context);
+                    return !$role->has($permission) && $rule->can($actor, $context);
                 case RuleMode::ever:
                     return $rule->can($actor, $context);
             }
