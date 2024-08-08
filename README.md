@@ -53,7 +53,7 @@ class User implements \Bermuda\RBAC\RoleInterface
 
     public function has(string|PermissionInterface $permission): bool
     {
-        return array_key_exists($permission?->permission ?? $permission, $this->permissions);
+        return array_key_exists(is_string($permission) ?$permission->getId() : $permission, $this->permissions);
     }
 }
 
