@@ -6,6 +6,8 @@ interface RoleInterface
 {
     public function getHierarchy(): int ;
 
+    public function getName(): string ;
+
     /**
      * @return iterable<PermissionInterface>
      */
